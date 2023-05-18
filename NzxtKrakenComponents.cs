@@ -36,9 +36,11 @@ namespace FanControl.NzxtKraken
    
     internal abstract class KrakenControl : KrakenSensor, IPluginControlSensor
     {
-        const float _resetValue = 60.0f;
+        float _resetValue = 60.0f;
 
-        public KrakenControl(string id, string name) : base(id, name) {}
+        public KrakenControl(string id, string name, float resetValue) : base(id, name) {
+            _resetValue = resetValue;
+        }
 
         public void Reset()
         {

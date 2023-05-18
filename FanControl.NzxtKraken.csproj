@@ -37,10 +37,8 @@
       <HintPath>..\..\Documents\FanControl\FanControl.Plugins.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="HidSharp, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\HidSharp.2.1.0\lib\net35\HidSharp.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-      <Private>False</Private>
+    <Reference Include="HidSharp">
+      <HintPath>..\..\Documents\FanControl\HidSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -57,11 +55,12 @@
     <Compile Include="NzxtKrakenComponents.cs" />
     <Compile Include="NzxtKrakenDevice.cs" />
     <Compile Include="NzxtKrakenPlugin.cs" />
+    <Compile Include="NzxtKrakenV2.cs" />
     <Compile Include="NzxtKrakenV3.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="README.md" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

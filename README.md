@@ -6,12 +6,13 @@ Grab a release and unpack it to `Plugins` directory of your FanControl installat
 
 ## Setting up the developer environment
 
-The project, after being imported to Visual Studio needs to have it reference to `FanControl.Plugins.dll`.
+The project, after being imported to Visual Studio needs to have it reference to `FanControl.Plugins.dll` and `HidSharp.dll` from Fancontrol package.
 
 ## Supported devices
 
 - NZXT Kraken X3 (X73, X63, X53)
 - NZXT Kraken Z3 (Z73, Z63, Z53)
+- NZXT Kraken X2 (X72, X62, X52, X42)
 
 ## License
 

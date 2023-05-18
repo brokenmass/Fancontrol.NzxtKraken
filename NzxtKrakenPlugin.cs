@@ -23,14 +23,18 @@ namespace FanControl.NzxtKraken
         public void Load(IPluginSensorsContainer _container)
         {
             var hidDevices = DeviceList.Local.GetHidDevices(0x1E71);
-            foreach(var hidDevice in hidDevices)
+
+            foreach (var hidDevice in hidDevices)
             {
                 if(NzxtKrakenX3.SupportsDevice(hidDevice))
                 {
                     devices.Add(new NzxtKrakenX3(hidDevice, logger, _container));
                 } else if (NzxtKrakenZ3.SupportsDevice(hidDevice))
                 {
-                    devices.Add(new NzxtKrakenX3(hidDevice, logger, _container));
+                    devices.Add(new NzxtKrakenZ3(hidDevice, logger, _container));
+                } else if (NzxtKrakenX2.SupportsDevice(hidDevice))
+                {
+                    devices.Add(new NzxtKrakenX2(hidDevice, logger, _container));
                 }
 
             }
