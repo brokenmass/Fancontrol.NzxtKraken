@@ -1,8 +1,10 @@
 # FanControl.NzxtKraken
 
+Adds support for some Kraken AIOs to Fancontrol that otherwise would not be working (until LibreHardwareMonitor merge this PR https://github.com/LibreHardwareMonitor/LibreHardwareMonitor/pull/1078)
+
 ## Installation
 
-Grab a release and unpack it to `Plugins` directory of your FanControl installation
+Grab latest release `FanControl.NzxtKraken.dll` and save it to the `Plugins` directory of your FanControl installation
 
 ## Setting up the developer environment
 
