@@ -35,10 +35,12 @@ namespace FanControl.NzxtKraken
                 } else if (NzxtKrakenX2.SupportsDevice(hidDevice))
                 {
                     devices.Add(new NzxtKrakenX2(hidDevice, logger, _container));
-                }
-                else if (NzxtKrakenElite.SupportsDevice(hidDevice))
+                } else if (NzxtKrakenElite.SupportsDevice(hidDevice))
                 {
                     devices.Add(new NzxtKrakenElite(hidDevice, logger, _container));
+                } else if (NzxtKraken2023.SupportsDevice(hidDevice))
+                {
+                    devices.Add(new NzxtKraken2023(hidDevice, logger, _container));
                 }
             }
         }

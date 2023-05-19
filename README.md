@@ -12,7 +12,7 @@ The project, after being imported to Visual Studio needs to have it reference to
 
 ## Supported devices
 
-- NZXT Kraken Elite 2023
+- NZXT Kraken 2023 (Standard / Elite)
 - NZXT Kraken X3 (X73, X63, X53)
 - NZXT Kraken Z3 (Z73, Z63, Z53)
 - NZXT Kraken X2 (X72, X62, X52, X42)
