@@ -15,26 +15,25 @@ namespace FanControl.NzxtKraken
     internal class KrakenControlV3 : KrakenControl
     {
         HidDevice _hidDevice;
-        byte _channel;
         int _minValue;
-        public KrakenControlV3(string id, string name, float resetValue, int minValue, HidDevice hidDevice, byte channel) : base(id, name, resetValue)
+        byte[] _packet;
+        public KrakenControlV3(string id, string name, float resetValue, int minValue, HidDevice hidDevice, byte[] channelData) : base(id, name, resetValue)
         {
             _hidDevice = hidDevice;
-            _channel = channel;
             _minValue = minValue;
+            _packet = new byte[44];
+            _packet[0] = 0x72;
+            _packet[1] = channelData[0];
+            _packet[2] = channelData[1];
+            _packet[3] = channelData[2];
         }
 
         public override void Set(float val)
         {
             _hidDevice.TryOpen(out HidStream stream);
-            var speed = Math.Min(Math.Max((int) val, _minValue), 100);
-            var packet = new byte[44];
-            packet[0] = 0x72;
-            packet[1] = _channel;
-            packet[2] = 0x0;
-            packet[3] = 0x0;
-            for (int i = 0; i < 40; i++) packet[i + 4] = (byte) speed;
-            stream.Write(packet);
+            var speed = Math.Min(Math.Max((int)val, _minValue), 100);
+            for (int i = 0; i < 40; i++) _packet[i + 4] = (byte)speed;
+            stream.Write(_packet);
             stream.Close();
         }
     }
@@ -42,6 +41,9 @@ namespace FanControl.NzxtKraken
     internal class NzxtKrakenX3 : NzxtKrakenDevice
     {
         internal override string Name => "Kraken X3";
+
+        internal virtual byte[] PumpControlHeader => new byte[] { 0x1, 0x0, 0x0 };
+
         public KrakenSensor liquidTemperature;
         public KrakenSensor pumpSpeed;
         public KrakenControlV3 pumpControl;
@@ -53,7 +55,7 @@ namespace FanControl.NzxtKraken
             pumpSpeed = new KrakenSensor($"pumprpm-{_serial}", $"Pump - {Name}");
             _container.FanSensors.Add(pumpSpeed);
 
-            pumpControl = new KrakenControlV3($"pumpcontrol-{_serial}", $"Pump - {Name}", 60, 20, hidDevice, 0x1 );
+            pumpControl = new KrakenControlV3($"pumpcontrol-{_serial}", $"Pump - {Name}", 60, 20, hidDevice, PumpControlHeader);
             _container.ControlSensors.Add(pumpControl);
         }
 
@@ -82,6 +84,10 @@ namespace FanControl.NzxtKraken
     internal class NzxtKrakenZ3 : NzxtKrakenX3
     {
         internal override string Name => "Kraken Z3";
+        internal override byte[] PumpControlHeader => new byte[] { 0x1, 0x0, 0x0 };
+
+        internal virtual byte[] FanControlHeader => new byte[] { 0x2, 0x0, 0x0 };
+
         public KrakenSensor fanSpeed;
         public KrakenControlV3 fanControl;
         public NzxtKrakenZ3(HidDevice hidDevice, IPluginLogger pluginLogger, IPluginSensorsContainer container) : base(hidDevice, pluginLogger, container)
@@ -89,7 +95,7 @@ namespace FanControl.NzxtKraken
             fanSpeed = new KrakenSensor($"fanrpm-{_serial}", $"Fan - {Name}");
             _container.FanSensors.Add(fanSpeed);
 
-            fanControl = new KrakenControlV3($"fancontrol-{_serial}", $"Fan - {Name}", 30, 0, hidDevice, 0x2);
+            fanControl = new KrakenControlV3($"fancontrol-{_serial}", $"Fan - {Name}", 30, 0, hidDevice, FanControlHeader);
             _container.ControlSensors.Add(fanControl);
         }
 
@@ -109,9 +115,12 @@ namespace FanControl.NzxtKraken
     internal class NzxtKrakenElite : NzxtKrakenZ3
     {
         internal override string Name => "Kraken Elite";
+        internal override byte[] PumpControlHeader => new byte[] { 0x1, 0x1, 0x0 };
+
+        internal override byte[] FanControlHeader => new byte[] { 0x2, 0x1, 0x1 };
 
         public NzxtKrakenElite(HidDevice hidDevice, IPluginLogger pluginLogger, IPluginSensorsContainer container) : base(hidDevice, pluginLogger, container)
-        {}
+        { }
 
         public static new bool SupportsDevice(HidDevice hidDevice)
         {
@@ -122,7 +131,9 @@ namespace FanControl.NzxtKraken
     internal class NzxtKraken2023 : NzxtKrakenZ3
     {
         internal override string Name => "Kraken";
+        internal override byte[] PumpControlHeader => new byte[] { 0x1, 0x1, 0x0 };
 
+        internal override byte[] FanControlHeader => new byte[] { 0x2, 0x1, 0x1 };
         public NzxtKraken2023(HidDevice hidDevice, IPluginLogger pluginLogger, IPluginSensorsContainer container) : base(hidDevice, pluginLogger, container)
         { }
 
